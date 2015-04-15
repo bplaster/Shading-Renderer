@@ -49,7 +49,8 @@
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <PathRunnable
-         FilePath = "/Users/brandonplaster/Development/Projects/Graphics/skeleton/build/assignment">
+         runnableDebuggingMode = "0"
+         FilePath = "/Users/brandonplaster/Development/Projects/Graphics/Shading-Renderer/build/assignment">
       </PathRunnable>
       <MacroExpansion>
          <BuildableReference
@@ -69,7 +70,8 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C5EE0A251A71506700FAF23F"
