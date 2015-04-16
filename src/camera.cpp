@@ -4,7 +4,7 @@
 
 camerahdl::camerahdl()
 {
-	position = vec3f(0., 0., 3.0);
+	position = vec3f(0., 0., 10.0);
 	orientation = vec3f(0.0, 0.0, 0.0);
     model = new pyramidhdl(0.2, 0.5, 4.0);
 	type = "camera";
@@ -56,10 +56,10 @@ void orthohdl::project(canvashdl *canvas)
 
 frustumhdl::frustumhdl()
 {
-	left = -2.0;
-	right = 2.0;
-	bottom = -2.0;
-	top = 2.0;
+	left = -0.5;
+	right = 0.5;
+	bottom = -0.5;
+	top = 0.5;
 	near = 2.0;
 	far = 101.0;
 	type = "frustum";

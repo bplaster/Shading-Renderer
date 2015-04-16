@@ -326,6 +326,11 @@ vec3f canvashdl::shade_vertex(vec8f v, vector<float> &varying)
     const materialhdl *material;
     get_uniform("material", material);
     
+    if (!material) {
+        material = new uniformhdl;
+        uniform["material"] = material;
+    }
+    
     vec4f eye_space_vertex;
     eye_space_vertex = material->shade_vertex(this, vec3f(v[0],v[1],v[2]), vec3f(v[3],v[4],v[5]), varying);
     return eye_space_vertex;
@@ -396,116 +401,165 @@ void canvashdl::plot_point(vec3i v, vector<float> varying)
  */
 void canvashdl::plot_line(vec3i vp1, vector<float> v1_varying, vec3i vp2, vector<float> v2_varying)
 {
-	// TODO Assignment 1: Implement Bresenham's Algorithm.
-    // Convert to Pixel coordinates here
-//    vec3i vp1 = to_pixel(v1);
-//    vec3i vp2 = to_pixel(v2);
-    
-    // Variables
-    vec3i xy, tmp;
-    vector<float> v, tmpv;
-    int dy = abs(vp2[1] - vp1[1]);
-    int dx = abs(vp2[0] - vp1[0]);
-    
-    // Check cases
-    // abs(slope) < 1
-    if(dy<=dx){
-        // orient points for E/NE/SE movement
-        if(vp2[0]>=vp1[0]){
-            xy = vp1;
-            v = v1_varying;
-
-        } else {
-            xy = vp2;
-            tmp = vp2;
-            vp2 = vp1;
-            vp1 = tmp;
-            
-            v = v2_varying;
-            tmpv = v2_varying;
-            v2_varying = v1_varying;
-            v1_varying = tmpv;
-        }
-        
-        plot(xy, v);
-        int d = 2*dy-dx;
-        // step through each pixel
-        while (xy[0] <= vp2[0]){
-            xy[0]++;
-            // E
-            if(d < 0){
-                d+=2*dy;
-            }
-            // NE/SE
-            else {
-                if(vp2[1]>xy[1]){
-                    xy[1]++;
-                } else {
-                    xy[1]--;
-                }
-                d+=2*(dy-dx);
-            }
-            
-            // Interpolate varying
-            float t12 = (float)(vp2[0] - xy[0])/dx;
-            xy[2] = (int)(t12*vp1[2] + (1.-t12)*vp2[2]);
-            for (int j = 0; j < v1_varying.size(); j++) {
-                v[j] = t12*v1_varying[j] + (1.-t12)*v2_varying[j];
-            }
-
-            plot(xy, v);
-        }
-    }
-    // abs(slope) > 1
-    else {
-        // orient points for E/NE/SE movement
-        if(vp2[1]>=vp1[1]) {
-            xy = vp1;
-            v = v1_varying;
-            
-        } else {
-            xy = vp2;
-            tmp = vp2;
-            vp2 = vp1;
-            vp1 = tmp;
-            
-            v = v2_varying;
-            tmpv = v2_varying;
-            v2_varying = v1_varying;
-            v1_varying = tmpv;
-        }
-        
-        plot(xy, v);
-        int d = 2*dx-dy;
-        // step through each pixel
-        while (xy[1] <= vp2[1]){
-            xy[1]++;
-            // E
-            if(d<=0){
-                d+=2*dx;
-            }
-            // NE/SE
-            else {
-                if(vp2[0]>xy[0]){
-                    xy[0]++;
-                } else {
-                    xy[0]--;
-                }
-                d+=2*(dx-dy);
-            }
-            
-            // Interpolate varying
-            float t12 = (float)(vp2[1] - xy[1])/dy;
-            xy[2] = (int)(t12*vp1[2] + (1.-t12)*vp2[2]);
-            for (int j = 0; j < v1_varying.size(); j++) {
-                v[j] = t12*v1_varying[j] + (1.-t12)*v2_varying[j];
-            }
-            
-            plot(xy, v);
-        }
-    }
+//	// TODO Assignment 1: Implement Bresenham's Algorithm.
+//    // Convert to Pixel coordinates here
+////    vec3i vp1 = to_pixel(v1);
+////    vec3i vp2 = to_pixel(v2);
+//    
+//    // Variables
+//    vec3i xy, tmp;
+//    vector<float> v, tmpv;
+//    int dy = abs(vp2[1] - vp1[1]);
+//    int dx = abs(vp2[0] - vp1[0]);
+//    
+//    // Check cases
+//    // abs(slope) < 1
+//    if(dy<=dx){
+//        // orient points for E/NE/SE movement
+//        if(vp2[0]>=vp1[0]){
+//            xy = vp1;
+//            v = v1_varying;
+//
+//        } else {
+//            xy = vp2;
+//            tmp = vp2;
+//            vp2 = vp1;
+//            vp1 = tmp;
+//            
+//            v = v2_varying;
+//            tmpv = v2_varying;
+//            v2_varying = v1_varying;
+//            v1_varying = tmpv;
+//        }
+//        
+//        plot(xy, v);
+//        int d = 2*dy-dx;
+//        // step through each pixel
+//        while (xy[0] <= vp2[0]){
+//            xy[0]++;
+//            // E
+//            if(d < 0){
+//                d+=2*dy;
+//            }
+//            // NE/SE
+//            else {
+//                if(vp2[1]>xy[1]){
+//                    xy[1]++;
+//                } else {
+//                    xy[1]--;
+//                }
+//                d+=2*(dy-dx);
+//            }
+//            
+//            // Interpolate varying
+//            float t12 = (float)(vp2[0] - xy[0])/dx;
+//            xy[2] = (int)(t12*vp1[2] + (1.-t12)*vp2[2]);
+//            for (int j = 0; j < v1_varying.size(); j++) {
+//                v[j] = t12*v1_varying[j] + (1.-t12)*v2_varying[j];
+//            }
+//
+//            plot(xy, v);
+//        }
+//    }
+//    // abs(slope) > 1
+//    else {
+//        // orient points for E/NE/SE movement
+//        if(vp2[1]>=vp1[1]) {
+//            xy = vp1;
+//            v = v1_varying;
+//            
+//        } else {
+//            xy = vp2;
+//            tmp = vp2;
+//            vp2 = vp1;
+//            vp1 = tmp;
+//            
+//            v = v2_varying;
+//            tmpv = v2_varying;
+//            v2_varying = v1_varying;
+//            v1_varying = tmpv;
+//        }
+//        
+//        plot(xy, v);
+//        int d = 2*dx-dy;
+//        // step through each pixel
+//        while (xy[1] <= vp2[1]){
+//            xy[1]++;
+//            // E
+//            if(d<=0){
+//                d+=2*dx;
+//            }
+//            // NE/SE
+//            else {
+//                if(vp2[0]>xy[0]){
+//                    xy[0]++;
+//                } else {
+//                    xy[0]--;
+//                }
+//                d+=2*(dx-dy);
+//            }
+//            
+//            // Interpolate varying
+//            float t12 = (float)(vp2[1] - xy[1])/dy;
+//            xy[2] = (int)(t12*vp1[2] + (1.-t12)*vp2[2]);
+//            for (int j = 0; j < v1_varying.size(); j++) {
+//                v[j] = t12*v1_varying[j] + (1.-t12)*v2_varying[j];
+//            }
+//            
+//            plot(xy, v);
+//        }
+//    }
 
 	// TODO Assignment 2: Interpolate the varying values before passing them into plot.
+    
+//    vec3i s1 = (vec3i)v1;
+//    vec3i s2 = (vec3i)v2;
+    vec3i s1 = vp1;
+    vec3i s2 = vp2;
+    
+    int b = (abs(s2[1] - s1[1]) > abs(s2[0] - s1[0]));
+    
+    vec2i dv = (vec2i)s2 - (vec2i)s1;
+    
+    vec2i step((int)(dv[0] > 0) - (int)(dv[0] < 0),
+               (int)(dv[1] > 0) - (int)(dv[1] < 0));
+    dv[0] *= step[0];
+    dv[1] *= step[1];
+    
+    int D = 2*dv[1-b] - dv[b];
+    
+    // TODO Assignment 2: Interpolate the varying values before passing them into plot.
+    vector<float> varying = v1_varying;
+    
+    plot(s1, varying);
+    
+    vec3i p = s1;
+    float increment = (float)step[b]/(float)(s2[b] - s1[b]);
+    float interpolate = 0.0f;
+    float zdiff = vp2[2] - vp1[2];
+    p[b]+=step[b];
+    while (step[b]*p[b] < step[b]*s2[b])
+    {
+        if (D > 0)
+        {
+            p[1-b] += step[1-b];
+            D += 2*(dv[1-b] - dv[b]);
+        }
+        else
+            D += 2*dv[1-b];
+        
+        p[2] = (int)(zdiff*interpolate) + s1[2];
+        
+        // Interpolate varying
+        for (int j = 0; j < varying.size(); j++) {
+            varying[j] = (float)(v2_varying[j] - v1_varying[j])*interpolate + v1_varying[j];
+        }
+
+        
+        plot(p, varying);
+        p[b] += step[b];
+        interpolate += increment;
+    }
 }
 
 void canvashdl::plot_horizontal_line(vec3i vp1, vector<float> v1_varying, vec3i vp2, vector<float> v2_varying) {
@@ -527,16 +581,14 @@ void canvashdl::plot_horizontal_line(vec3i vp1, vector<float> v1_varying, vec3i 
     vector<float> v = v1_varying;
     float t123;
     
-    plot(vp1, v1_varying);
-
     for (int i = 0; i < dx; i++) {
-        xy[0]++;
-        t123 = (float)(vp2[0] - xy[0])/dx;
-        xy[2] = (int)(t123*vp1[2] + (1.-t123)*vp2[2]);
+        t123 = (float)i/(float)dx;
+        xy[2] = (int)(t123*vp2[2] + (1.-t123)*vp1[2]);
         for (int j = 0; j < v1_varying.size(); j++) {
-            v[j] = t123*v1_varying[j] + (1.-t123)*v2_varying[j];
+            v[j] = t123*v2_varying[j] + (1.-t123)*v1_varying[j];
         }
         plot(xy, v);
+        xy[0]++;
     }
     
     plot(vp2, v2_varying);
@@ -712,18 +764,9 @@ void canvashdl::plot_triangle(vec3f v1, vector<float> v1_varying, vec3f v2, vect
             
             // TODO Assignment 2: Calculate the average varying vector for flat shading and call plot_half_triangle as needed.
             
-            // Calculate average varying vector
-            vector<float> ave_varying(v1_varying.size(), 0);
-            for (int i=0; i < ave_varying.size(); i++){
-                ave_varying[i] = (v1_varying[i] + v2_varying[i] + v3_varying[i])/3.;
-            }
-            
             // Calculate pixel coordinates, retain z-value
             vec3i temp;
             vector<float> tempV;
-//            vi1 = to_pixel(v1);
-//            vi2 = to_pixel(v2);
-//            vi3 = to_pixel(v3);
             
             // Sort by Y
             if (vi1[1] > vi2[1])
@@ -757,6 +800,12 @@ void canvashdl::plot_triangle(vec3f v1, vector<float> v1_varying, vec3f v2, vect
                 v3_varying = tempV;
             }
             
+            // Calculate average varying vector
+            vector<float> ave_varying(v1_varying.size(), 0);
+            for (int i=0; i < ave_varying.size(); i++){
+                ave_varying[i] = (v1_varying[i] + v2_varying[i] + v3_varying[i])/3.;
+            }
+            
             // bottom-flat triangle
             if (vi2[1] == vi3[1]) {
                 plot_half_triangle(vi1, v1_varying, vi2, v2_varying, vi3, v3_varying, ave_varying);
@@ -772,7 +821,6 @@ void canvashdl::plot_triangle(vec3f v1, vector<float> v1_varying, vec3f v2, vect
                 // Interpolate Z
                 float t13 = (float)(vi3[1] - y)/(float)(vi3[1] - vi1[1]);
                 int z = (int)(t13*vi1[2] + (1.-t13)*vi3[2]);
-                vec3i vi4 (x, y, z);
 
                 // Interpolate Varying
                 vector<float> v4_varying = v2_varying;
@@ -781,6 +829,7 @@ void canvashdl::plot_triangle(vec3f v1, vector<float> v1_varying, vec3f v2, vect
                 }
                 
                 // Plot top and bottom triangles
+                vec3i vi4  (x, y, z);
                 plot_half_triangle(vi1, v1_varying, vi2, v2_varying, vi4, v4_varying, ave_varying);
                 plot_half_triangle(vi3, v3_varying, vi2, v2_varying, vi4, v4_varying, ave_varying);
             }
