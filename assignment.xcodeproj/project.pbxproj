@@ -45,35 +45,6 @@
 		C5EE0A261A71506700FAF23F /* assignment */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = assignment; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5EE0A301A71517000FAF23F /* COPYRIGHT.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYRIGHT.txt; sourceTree = "<group>"; };
 		C5EE0A321A71517000FAF23F /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		C5EE0A341A71517000FAF23F /* canvas.ft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = canvas.ft; sourceTree = "<group>"; };
-		C5EE0A351A71517000FAF23F /* canvas.vx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = canvas.vx; sourceTree = "<group>"; };
-		C5EE0A371A71517000FAF23F /* banana.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = banana.obj; sourceTree = "<group>"; };
-		C5EE0A381A71517000FAF23F /* beethoven.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = beethoven.mtl; sourceTree = "<group>"; };
-		C5EE0A391A71517000FAF23F /* beethoven.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = beethoven.obj; sourceTree = "<group>"; };
-		C5EE0A3A1A71517000FAF23F /* bishop.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bishop.obj; sourceTree = "<group>"; };
-		C5EE0A3B1A71517000FAF23F /* blob.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blob.obj; sourceTree = "<group>"; };
-		C5EE0A3C1A71517000FAF23F /* Bunny.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bunny.mtl; sourceTree = "<group>"; };
-		C5EE0A3D1A71517000FAF23F /* Bunny.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Bunny.obj; sourceTree = "<group>"; };
-		C5EE0A3E1A71517000FAF23F /* chain.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chain.obj; sourceTree = "<group>"; };
-		C5EE0A3F1A71517000FAF23F /* cow.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cow.obj; sourceTree = "<group>"; };
-		C5EE0A401A71517000FAF23F /* cowUV.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cowUV.mtl; sourceTree = "<group>"; };
-		C5EE0A411A71517000FAF23F /* cowUV.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cowUV.obj; sourceTree = "<group>"; };
-		C5EE0A421A71517000FAF23F /* demo.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.obj; sourceTree = "<group>"; };
-		C5EE0A431A71517000FAF23F /* dolphin.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dolphin.obj; sourceTree = "<group>"; };
-		C5EE0A441A71517000FAF23F /* feline.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = feline.obj; sourceTree = "<group>"; };
-		C5EE0A451A71517000FAF23F /* helment.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = helment.mtl; sourceTree = "<group>"; };
-		C5EE0A461A71517000FAF23F /* helmet.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = helmet.jpg; sourceTree = "<group>"; };
-		C5EE0A471A71517000FAF23F /* helmet.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = helmet.obj; sourceTree = "<group>"; };
-		C5EE0A481A71517000FAF23F /* pawn.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pawn.obj; sourceTree = "<group>"; };
-		C5EE0A491A71517000FAF23F /* shirt.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shirt.mtl; sourceTree = "<group>"; };
-		C5EE0A4A1A71517000FAF23F /* shirt.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = shirt.obj; sourceTree = "<group>"; };
-		C5EE0A4B1A71517000FAF23F /* shirt4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = shirt4.jpg; sourceTree = "<group>"; };
-		C5EE0A4C1A71517000FAF23F /* shirt4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shirt4.png; sourceTree = "<group>"; };
-		C5EE0A4D1A71517000FAF23F /* statue.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = statue.mtl; sourceTree = "<group>"; };
-		C5EE0A4E1A71517000FAF23F /* statue.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = statue.obj; sourceTree = "<group>"; };
-		C5EE0A4F1A71517000FAF23F /* statue1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = statue1.jpg; sourceTree = "<group>"; };
-		C5EE0A501A71517000FAF23F /* statue1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = statue1.png; sourceTree = "<group>"; };
-		C5EE0A511A71517000FAF23F /* teapot.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = teapot.obj; sourceTree = "<group>"; };
 		C5EE0A531A71517000FAF23F /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		C5EE0A541A71517000FAF23F /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		C5EE0A551A71517000FAF23F /* canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = canvas.cpp; sourceTree = "<group>"; };
@@ -126,7 +97,6 @@
 				C5EE0A791A71524600FAF23F /* GLUT.framework */,
 				C5EE0A301A71517000FAF23F /* COPYRIGHT.txt */,
 				C5EE0A321A71517000FAF23F /* README.txt */,
-				C5EE0A331A71517000FAF23F /* res */,
 				C5EE0A521A71517000FAF23F /* src */,
 				C5EE0A271A71506700FAF23F /* Products */,
 			);
@@ -138,50 +108,6 @@
 				C5EE0A261A71506700FAF23F /* assignment */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		C5EE0A331A71517000FAF23F /* res */ = {
-			isa = PBXGroup;
-			children = (
-				C5EE0A341A71517000FAF23F /* canvas.ft */,
-				C5EE0A351A71517000FAF23F /* canvas.vx */,
-				C5EE0A361A71517000FAF23F /* models */,
-			);
-			path = res;
-			sourceTree = "<group>";
-		};
-		C5EE0A361A71517000FAF23F /* models */ = {
-			isa = PBXGroup;
-			children = (
-				C5EE0A371A71517000FAF23F /* banana.obj */,
-				C5EE0A381A71517000FAF23F /* beethoven.mtl */,
-				C5EE0A391A71517000FAF23F /* beethoven.obj */,
-				C5EE0A3A1A71517000FAF23F /* bishop.obj */,
-				C5EE0A3B1A71517000FAF23F /* blob.obj */,
-				C5EE0A3C1A71517000FAF23F /* Bunny.mtl */,
-				C5EE0A3D1A71517000FAF23F /* Bunny.obj */,
-				C5EE0A3E1A71517000FAF23F /* chain.obj */,
-				C5EE0A3F1A71517000FAF23F /* cow.obj */,
-				C5EE0A401A71517000FAF23F /* cowUV.mtl */,
-				C5EE0A411A71517000FAF23F /* cowUV.obj */,
-				C5EE0A421A71517000FAF23F /* demo.obj */,
-				C5EE0A431A71517000FAF23F /* dolphin.obj */,
-				C5EE0A441A71517000FAF23F /* feline.obj */,
-				C5EE0A451A71517000FAF23F /* helment.mtl */,
-				C5EE0A461A71517000FAF23F /* helmet.jpg */,
-				C5EE0A471A71517000FAF23F /* helmet.obj */,
-				C5EE0A481A71517000FAF23F /* pawn.obj */,
-				C5EE0A491A71517000FAF23F /* shirt.mtl */,
-				C5EE0A4A1A71517000FAF23F /* shirt.obj */,
-				C5EE0A4B1A71517000FAF23F /* shirt4.jpg */,
-				C5EE0A4C1A71517000FAF23F /* shirt4.png */,
-				C5EE0A4D1A71517000FAF23F /* statue.mtl */,
-				C5EE0A4E1A71517000FAF23F /* statue.obj */,
-				C5EE0A4F1A71517000FAF23F /* statue1.jpg */,
-				C5EE0A501A71517000FAF23F /* statue1.png */,
-				C5EE0A511A71517000FAF23F /* teapot.obj */,
-			);
-			path = models;
 			sourceTree = "<group>";
 		};
 		C5EE0A521A71517000FAF23F /* src */ = {
@@ -339,7 +265,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -373,7 +299,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
@@ -391,6 +317,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OBJROOT = assignment.build;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.9;
 				SYMROOT = "$(BUILD_DIR)";
 			};
 			name = Debug;
@@ -409,6 +336,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OBJROOT = assignment.build;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.9;
 				SYMROOT = "$(BUILD_DIR)";
 			};
 			name = Release;
