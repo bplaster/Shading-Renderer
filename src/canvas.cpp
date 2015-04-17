@@ -563,7 +563,6 @@ void canvashdl::plot_line(vec3i vp1, vector<float> v1_varying, vec3i vp2, vector
 }
 
 void canvashdl::plot_horizontal_line(vec3i vp1, vector<float> v1_varying, vec3i vp2, vector<float> v2_varying) {
-    
     // Draw from right to left
     if (vp1[0] > vp2[0]) {
         vec3i temp = vp1;
@@ -582,9 +581,9 @@ void canvashdl::plot_horizontal_line(vec3i vp1, vector<float> v1_varying, vec3i 
     float t123;
     
     for (int i = 0; i < dx; i++) {
-        t123 = (float)i/(float)dx;
+        t123 = (float)i/dx;
         xy[2] = (int)(t123*vp2[2] + (1.-t123)*vp1[2]);
-        for (int j = 0; j < v1_varying.size(); j++) {
+        for (int j = 0; j < v.size(); j++) {
             v[j] = t123*v2_varying[j] + (1.-t123)*v1_varying[j];
         }
         plot(xy, v);
@@ -613,122 +612,223 @@ int canvashdl::sign(int x) {
  */
 void canvashdl::plot_half_triangle(vec3i s1, vector<float> v1_varying, vec3i s2, vector<float> v2_varying, vec3i s3, vector<float> v3_varying, vector<float> ave_varying)
 {
-	// TODO Assignment 2: Implement Bresenham's half triangle fill algorithm (refer Ned's link on Piazza)
+    
+    int b2 = (abs(s2[1] - s1[1]) > abs(s2[0] - s1[0]));
+    int b3 = (abs(s3[1] - s1[1]) > abs(s3[0] - s1[0]));
+
+    vec2i dv2 = (vec2i)s2 - (vec2i)s1;
+    vec2i dv3 = (vec2i)s3 - (vec2i)s1;
+    
+    vec2i step2((int)(dv2[0] > 0) - (int)(dv2[0] < 0),
+               (int)(dv2[1] > 0) - (int)(dv2[1] < 0));
+    dv2[0] *= step2[0];
+    dv2[1] *= step2[1];
+    
+    vec2i step3((int)(dv3[0] > 0) - (int)(dv3[0] < 0),
+                (int)(dv3[1] > 0) - (int)(dv3[1] < 0));
+    dv3[0] *= step3[0];
+    dv3[1] *= step3[1];
+    
+    int D2 = 2*dv2[1-b2] - dv2[b2];
+    int D3 = 2*dv3[1-b3] - dv3[b3];
+    
+    // TODO Assignment 2: Interpolate the varying values before passing them into plot.
+    vector<float> varying2, varying3;
+    
+    if (shade_model == flat || shade_model == none) {
+        varying2 = ave_varying;
+        varying3 = ave_varying;
+        plot_line(s1, ave_varying, s2, ave_varying);
+        plot_line(s2, ave_varying, s3, ave_varying);
+        plot_line(s3, ave_varying, s1, ave_varying);
+    } else {
+        varying2 = v1_varying;
+        varying3 = v1_varying;
+        plot_line(s1, v1_varying, s2, v2_varying);
+        plot_line(s2, v2_varying, s3, v3_varying);
+        plot_line(s3, v3_varying, s1, v1_varying);
+    }
+
+    vec3i p2 = s1;
+    vec3i p3 = s1;
+    float increment2 = (float)step2[b2]/(float)(s2[b2] - s1[b2]);
+    float increment3 = (float)step3[b3]/(float)(s3[b3] - s1[b3]);
+
+    float interpolate2 = 0.0f;
+    float interpolate3 = 0.0f;
+
+    float zdiff2 = s2[2] - s1[2];
+    float zdiff3 = s3[2] - s1[2];
+
+    
+    while (step2[b2]*p2[b2] < step2[b2]*s2[b2])
+    {
+        while (p2[1] == p3[1] && step2[b2]*p2[b2] < step2[b2]*s2[b2]) {
+        
+            if (D2 > 0)
+            {
+                p2[1-b2] += step2[1-b2];
+                D2 += 2*(dv2[1-b2] - dv2[b2]);
+            }
+            else
+                D2 += 2*dv2[1-b2];
+            
+            p2[b2] += step2[b2];
+            interpolate2 += increment2;
+        }
+    
+
+        while (p2[1] != p3[1])
+        {
+            if (D3 > 0)
+            {
+                p3[1-b3] += step3[1-b3];
+                D3 += 2*(dv3[1-b3] - dv3[b3]);
+            }
+            else
+                D3 += 2*dv3[1-b3];
+            
+            p3[b3] += step3[b3];
+            interpolate3 += increment3;
+        }
+        
+        // Interpolate Z
+        p2[2] = (int)(zdiff2*interpolate2) + s1[2];
+        p3[2] = (int)(zdiff3*interpolate3) + s1[2];
+
+        
+        // Interpolate varying
+        if (shade_model == gouraud || shade_model == phong) {
+            for (int j = 0; j < varying2.size(); j++) {
+                varying2[j] = (float)(v2_varying[j] - v1_varying[j])*interpolate2 + v1_varying[j];
+                varying3[j] = (float)(v3_varying[j] - v1_varying[j])*interpolate3 + v1_varying[j];
+            }
+        }
+
+        plot_horizontal_line(p2, varying2, p3, varying3);
+    }
+
+    
+    // TODO Assignment 2: Implement Bresenham's half triangle fill algorithm (refer Ned's link on Piazza)
     
     // Interpolate z-value for every pixel to be plotted and call plot function (z-buffer algorithm)
     
 	// TODO Assignment 2: Interpolate the varying values before passing them into plot.
     
-    // Variables
-    vec3i t2 = s1, t3 = s1;
-    vector<float> t2_varying, t3_varying; // TODO: interpolate
-    float t12 = 0., t13 = 0.;
-    
-    int dy2 = abs(s2[1] - s1[1]);
-    int dy2_sign = sign(s2[1] - s1[1]);
-    int dx2 = abs(s2[0] - s1[0]);
-    int dx2_sign = sign(s2[0] - s1[0]);
-    
-    int dy3 = abs(s3[1] - s1[1]);
-    int dy3_sign = sign(s3[1] - s1[1]);
-    int dx3 = abs(s3[0] - s1[0]);
-    int dx3_sign = sign(s3[0] - s1[0]);
-    
-    if (shade_model == flat || shade_model == none) {
-        t2_varying = ave_varying;
-        t3_varying = ave_varying;
-        plot_line(s1, ave_varying, s2, ave_varying);
-        plot_line(s2, ave_varying, s3, ave_varying);
-        plot_line(s3, ave_varying, s1, ave_varying);
-    } else {
-        t2_varying = v1_varying;
-        t3_varying = v1_varying;
-        plot_line(s1, v1_varying, s2, v2_varying);
-        plot_line(s2, v2_varying, s3, v3_varying);
-        plot_line(s3, v3_varying, s1, v1_varying);
-    }
-    
-    // Swap values based on if slope > 1
-    bool swap2 = false, swap3 = false;
-    
-    if (dy2 > dx2)
-    {
-        int tmp = dx2;
-        dx2 = dy2;
-        dy2 = tmp;
-        swap2 = true;
-    }
-    
-    if (dy3 > dx3)
-    {
-        int tmp = dx3;
-        dx3 = dy3;
-        dy3 = tmp;
-        swap3 = true;
-    }
-    
-    int e2 = 2 * dy2 - dx2;
-    int e3 = 2 * dy3 - dx3;
-    
-    plot(s1, v1_varying);
-
-    for (int i = 0; i < dx2; i++)
-    {
-        // Trace next value of t2
-        while (e2 >= 0)
-        {
-            if (swap2)
-                t2[0] += dx2_sign;
-            else
-                t2[1] += dy2_sign;
-            e2 -= 2 * dx2;
-        }
-        
-        if (swap2)
-            t2[1] += dy2_sign;
-        else
-            t2[0] += dx2_sign;
-        
-        e2 += 2 * dy2;
-        
-        // Trace next value of t3
-        while (t3[1] != t2[1])
-        {
-            while (e3 >= 0)
-            {
-                if (swap3)
-                    t3[0] += dx3_sign;
-                else
-                    t3[1] += dy3_sign;
-                e3 -= 2 * dx3;
-            }
-            
-            if (swap3)
-                t3[1] += dy3_sign;
-            else
-                t3[0] += dx3_sign;
-            
-            e3 += 2 * dy3;
-        }
-        
-        // Interpolate Z values
-        t12 = (float)(s2[1] - t2[1])/(float)(s2[1] - s1[1]);
-        t13 = (float)(s3[1] - t3[1])/(float)(s3[1] - s1[1]);
-        
-        t2[2] = t12*s1[2] + (1.-t12)*s2[2];
-        t3[2] = t13*s1[2] + (1.-t13)*s3[2];
-        
-        // Plot based on shading model
-        if (shade_model == gouraud || shade_model == phong) {
-            // Interpolate varying
-            for (int j = 0; j < t2_varying.size(); j++) {
-                t2_varying[j] = t12*v1_varying[j] + (1.-t12)*v2_varying[j];
-                t3_varying[j] = t13*v1_varying[j] + (1.-t13)*v3_varying[j];
-            }
-        }
-        // Plot line between t2 and t3
-        plot_horizontal_line(t2, t2_varying, t3, t3_varying);
-    }
+//    // Variables
+//    vec3i t2 = s1, t3 = s1;
+//    vector<float> t2_varying, t3_varying;
+//    float t12 = 0., t13 = 0.;
+//    
+//    int dy2 = abs(s2[1] - s1[1]);
+//    int dy2_sign = sign(s2[1] - s1[1]);
+//    int dx2 = abs(s2[0] - s1[0]);
+//    int dx2_sign = sign(s2[0] - s1[0]);
+//    
+//    int dy3 = abs(s3[1] - s1[1]);
+//    int dy3_sign = sign(s3[1] - s1[1]);
+//    int dx3 = abs(s3[0] - s1[0]);
+//    int dx3_sign = sign(s3[0] - s1[0]);
+//    
+//    if (shade_model == flat || shade_model == none) {
+//        t2_varying = ave_varying;
+//        t3_varying = ave_varying;
+//        plot_line(s1, ave_varying, s2, ave_varying);
+//        plot_line(s2, ave_varying, s3, ave_varying);
+//        plot_line(s3, ave_varying, s1, ave_varying);
+//    } else {
+//        t2_varying = v1_varying;
+//        t3_varying = v1_varying;
+//        plot_line(s1, v1_varying, s2, v2_varying);
+//        plot_line(s2, v2_varying, s3, v3_varying);
+//        plot_line(s3, v3_varying, s1, v1_varying);
+//    }
+//    
+//    // Swap values based on if slope > 1
+//    bool swap2 = false, swap3 = false;
+//    
+//    if (dy2 > dx2)
+//    {
+//        int tmp = dx2;
+//        dx2 = dy2;
+//        dy2 = tmp;
+//        swap2 = true;
+//    }
+//    
+//    if (dy3 > dx3)
+//    {
+//        int tmp = dx3;
+//        dx3 = dy3;
+//        dy3 = tmp;
+//        swap3 = true;
+//    }
+//    
+//    int e2 = 2 * dy2 - dx2;
+//    int e3 = 2 * dy3 - dx3;
+//    
+//    plot(s1, v1_varying);
+//
+//    for (int i = 0; i < dx2; i++)
+//    {
+//        // Trace next value of t2
+//        while (e2 >= 0)
+//        {
+//            if (swap2) {
+//                t2[0] += dx2_sign;
+//            } else {
+//                t2[1] += dy2_sign;
+//            }
+//            e2 -= 2 * dx2;
+//        }
+//        
+//        if (swap2){
+//            t2[1] += dy2_sign;
+//        } else {
+//            t2[0] += dx2_sign;
+//        }
+//        
+//        e2 += 2 * dy2;
+//        
+//        // Trace next value of t3
+//        while (t3[1] != t2[1])
+//        {
+//            while (e3 >= 0)
+//            {
+//                if (swap3){
+//                    t3[0] += dx3_sign;
+//                } else {
+//                    t3[1] += dy3_sign;
+//                }
+//                e3 -= 2 * dx3;
+//            }
+//            
+//            if (swap3){
+//                t3[1] += dy3_sign;
+//            } else {
+//                t3[0] += dx3_sign;
+//            }
+//            e3 += 2 * dy3;
+//        }
+//        
+//        // Interpolate Z values
+//        t12 = (float)(t2[1] - s1[1])/(float)(s2[1] - s1[1]);
+//        t13 = (float)(t3[1] - s1[1])/(float)(s3[1] - s1[1]);
+//        
+//        t2[2] = t12*s2[2] + (1.-t12)*s1[2];
+//        t3[2] = t13*s3[2] + (1.-t13)*s1[2];
+//        
+//        // Plot based on shading model
+//        if (shade_model == gouraud || shade_model == phong) {
+//            // Interpolate varying
+//            for (int j = 0; j < t2_varying.size(); j++) {
+//                t2_varying[j] = t12*v2_varying[j] + (1.-t12)*v1_varying[j];
+//                t3_varying[j] = t13*v3_varying[j] + (1.-t13)*v1_varying[j];
+//            }
+//        }
+//        // Plot line between t2 and t3
+////        plot_horizontal_line(t2, t2_varying, t3, t3_varying);
+//        plot_line(t2, t2_varying, t3, t3_varying);
+//    }
 }
 
 
@@ -819,13 +919,13 @@ void canvashdl::plot_triangle(vec3f v1, vector<float> v1_varying, vec3f v2, vect
                 int y = vi2[1];
                 
                 // Interpolate Z
-                float t13 = (float)(vi3[1] - y)/(float)(vi3[1] - vi1[1]);
-                int z = (int)(t13*vi1[2] + (1.-t13)*vi3[2]);
+                float t13 = (float)(y - vi1[1])/(float)(vi3[1] - vi1[1]);
+                int z = (int)(t13*vi3[2] + (1.-t13)*vi1[2]);
 
                 // Interpolate Varying
                 vector<float> v4_varying = v2_varying;
                 for (int j = 0; j < v4_varying.size(); j++) {
-                    v4_varying[j] = t13*v1_varying[j] + (1.-t13)*v3_varying[j];
+                    v4_varying[j] = t13*v3_varying[j] + (1.-t13)*v1_varying[j];
                 }
                 
                 // Plot top and bottom triangles
