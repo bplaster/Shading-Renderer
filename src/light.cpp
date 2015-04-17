@@ -53,7 +53,7 @@ void directionalhdl::update(canvashdl *canvas)
     canvas->rotate(this->model->orientation[0], vec3f(1.,0.,0.));
     
     canvas->update_normal_matrix();
-    this->direction = canvas->matrices[canvashdl::normal_matrix]*vec4f(0.,-1.,0.,1.);
+    this->direction = canvas->matrices[canvashdl::normal_matrix]*vec4f(0.,-1.,0.,0.);
     
     // Undo transformations
     canvas->rotate(-this->model->orientation[0], vec3f(1.,0.,0.));
@@ -68,10 +68,14 @@ void directionalhdl::shade(vec3f &ambient, vec3f &diffuse, vec3f &specular, vec3
 	 */
     
     float nDotVP; // normal . light direction
-    //float nDotHV; // normal . light half vector
+    float nDotHV; // normal . light half vector
     float pf; // power factor
-    nDotVP = fmax(0.0, dot(normal, norm(this->direction)));
-    //nDotHV = fmax(0.0, dot(normal, vec3(LightSource[i].halfVector)));
+    vec3f eye = -vertex;
+    vec3f VP = norm(this->direction);
+    vec3f halfVector = norm(VP + eye);
+
+    nDotVP = fmax(0.0, dot(normal, VP));
+    nDotHV = fmax(0.0, dot(normal, halfVector));
     if (nDotVP == 0.0)
         pf = 0.0;
     else
@@ -120,12 +124,13 @@ void pointhdl::shade(vec3f &ambient, vec3f &diffuse, vec3f &specular, vec3f vert
 	 */
     
     float nDotVP; // normal . light direction
-//    float nDotHV; // normal . light half vector
+    float nDotHV; // normal . light half vector
     float pf; // power factor
     float attenuation; // computed attenuation factor
     float d; // distance from surface to light source
+    vec3f eye = -vertex;
     vec3f VP; // direction from surface to light position
-//    vec3f halfVector; // direction of maximum highlights
+    vec3f halfVector; // direction of maximum highlights
     // Compute vector from surface to light position
     VP = this->position - vertex;
     // Compute distance between surface and light position
@@ -137,13 +142,13 @@ void pointhdl::shade(vec3f &ambient, vec3f &diffuse, vec3f &specular, vec3f vert
                          this->attenuation[1] * d +
                          this->attenuation[2] * d * d);
 
-//    halfVector = norm(VP);
+    halfVector = norm(VP + eye);
     nDotVP = fmax(0.0, dot(normal, VP));
-//    nDotHV = fmax(0.0, dot(normal, halfVector));
+    nDotHV = fmax(0.0, dot(normal, halfVector));
     if (nDotVP == 0.0)
         pf = 0.0;
     else
-        pf = pow(nDotVP, shininess);
+        pf = pow(nDotHV, shininess);
     ambient += this->ambient * attenuation;
     diffuse += this->diffuse * nDotVP * attenuation;
     specular += this->specular * pf * attenuation;
@@ -203,14 +208,15 @@ void spothdl::shade(vec3f &ambient, vec3f &diffuse, vec3f &specular, vec3f verte
 	 */
     
     float nDotVP; // normal . light direction
-//    float nDotHV; // normal . light half vector
+    float nDotHV; // normal . light half vector
     float pf; // power factor
     float spotDot; // cosine of angle between spotlight
     float spotAttenuation; // spotlight attenuation factor
     float attenuation; // computed attenuation factor
     float d; // distance from surface to light source
     vec3f VP; // direction from surface to light position
-//    vec3f halfVector; // direction of maximum highlights
+    vec3f halfVector; // direction of maximum highlights
+    vec3f eye = -vertex;
     // Compute vector from surface to light position
     VP = this->position - vertex;
     // Compute distance between surface and light position
@@ -231,13 +237,13 @@ void spothdl::shade(vec3f &ambient, vec3f &diffuse, vec3f &specular, vec3f verte
         spotAttenuation = pow(spotDot, this->exponent);
     // Combine the spotlight and distance attenuation.
     attenuation *= spotAttenuation;
-//    halfVector = norm(VP);
+    halfVector = norm(VP + eye);
     nDotVP = fmax(0.0, dot(normal, VP));
-//    nDotHV = fmax(0.0, dot(normal, halfVector));
+    nDotHV = fmax(0.0, dot(normal, halfVector));
     if (nDotVP == 0.0)
         pf = 0.0;
     else
-        pf = pow(nDotVP, shininess);
+        pf = pow(nDotHV, shininess);
     ambient += this->ambient * attenuation;
     diffuse += this->diffuse * nDotVP * attenuation;
     specular += this->specular * pf * attenuation;
