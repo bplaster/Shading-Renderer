@@ -696,10 +696,13 @@ void canvashdl::plot_half_triangle(vec3i s1, vector<float> v1_varying, vec3i s2,
         p2[2] = (int)(zdiff2*interpolate2) + s1[2];
         p3[2] = (int)(zdiff3*interpolate3) + s1[2];
 
+        
         // Interpolate varying
-        for (int j = 0; j < varying2.size(); j++) {
-            varying2[j] = (float)(v2_varying[j] - v1_varying[j])*interpolate2 + v1_varying[j];
-            varying3[j] = (float)(v3_varying[j] - v1_varying[j])*interpolate3 + v1_varying[j];
+        if (shade_model == gouraud || shade_model == phong) {
+            for (int j = 0; j < varying2.size(); j++) {
+                varying2[j] = (float)(v2_varying[j] - v1_varying[j])*interpolate2 + v1_varying[j];
+                varying3[j] = (float)(v3_varying[j] - v1_varying[j])*interpolate3 + v1_varying[j];
+            }
         }
 
         plot_horizontal_line(p2, varying2, p3, varying3);
